@@ -1,5 +1,6 @@
 # Codefundo_BlockChain Electronic voting 
 
+## Decision Helper
 Idea 1: Tracking progress of projects promised during elections.
 Description: 
 	a)Political parties promise a lot of things in their manifesto during elections.
@@ -16,7 +17,7 @@ Description:
 	c)We will then use this data to find it's relevance to the promises made during elections and rate the candidate on basis of      that.
 	d)This will allow people to see, how many times the politician raised their issue in parliament.
 	
-Idea 3: Online nomination of candidate.
+## Online nomination of candidate.
 Description: 
 	a)Create a portal where candidate file their nomination and provide all their details like aadhar card number and educational     details.
 	b)The data uploaded can be stored in blockchain to keep track of the data of candidate in case they try to fake it in future.
