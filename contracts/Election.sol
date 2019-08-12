@@ -17,17 +17,18 @@ contract Voting{
 
     struct Voter{
         Person person;
-        bool doesExist;
         bool isVoted;
         uint constituencyId;
         uint id;
         uint boothId;
+        bool doesExist;
     }
 
     //Booth
     struct Booth{
         string boothAddress;
-        uint boothId;
+        uint id;
+        uint constituencyId;
     }
 
     // Constituency
@@ -40,7 +41,7 @@ contract Voting{
 
     struct Officer{
         Person person;
-        uint id;    
+        uint id;
         uint constituencyId;
         uint boothId;
         bool doesExist;
@@ -51,7 +52,8 @@ contract Voting{
     mapping(address => Officer) officersList;
     mapping(uint => Voter) voters;
     mapping(string => uint) constituencyNameToId;
-
+    mapping(uint => uint) boothCount;
+    mapping(address => Booth) officerToBooth;
 
     uint votersCount;
     uint candidateCount;
@@ -63,23 +65,28 @@ contract Voting{
         uint constituencyId = constituencyNameToId[constituencyName];
         require(constituencyId > 0 && constituencyId <= constituencyCount,"Invalid Constituenc");
         // check aadhar.
-        Person storage person = Person(name,aadharId);
+        Person memory person = Person(name,aadharId);
         candidateCount++;
-        Candidate storage candidate = Candidate(person,0,constituencyId,candidateCount,true);
+        Candidate memory candidate = Candidate(person,0,constituencyId,candidateCount,true);
         candidates[candidate.id] = candidate;
     }
 
-    // update candidate
-    function updateCandidate(uint id) public {
+    // // update candidate
+    // function updateCandidate(uint id) public {
 
-    }
+    // }
 
     function addVoter(string memory constituencyName,uint boothId,string memory name,uint aadharId) public {
+        require(officersList[msg.sender].doesExist == true,"Officer Not Authorized");
+        uint constituencyId = constituencyNameToId[constituencyName];
+        require(constituencyId > 0 && constituencyId <= constituencyCount,"Invalid Constituency");
+        require(boothId > 0 && boothId <= boothCount[constituencyId], "Invalid Booth");
+        // verify aadhar.
         // verify voter age checking
         Person memory person = Person(name,aadharId);
         votersCount++;
         //error in below line,, what is id in voter
-        Voter memory voter = Voter(person,false,constituencyId,votersCount,boothId);
+        Voter memory voter = Voter(person,false,constituencyId,votersCount,boothId,true);
        //changed aadharid from voter.id,,coz of problem while verfying user
         voters[aadharId] = voter;
     }
@@ -92,14 +99,11 @@ contract Voting{
         candidates[candidateId].voteCount += 1;
     }
 
-    function addOfficer (uint officerId, uint boothId)public{
-        officerBoothList[boothId] = officerId;
-    }
-
-    function verifyVoterBeforeVoting(uint boothId, uint constituencyId,uint aadharId) public{
-        require(voters[aadharId].doesExist == true,"Voter not added to the voters list!" );
-        require(voters[aadharId].constituencyId == constituencyId, "Voter does not belong to this constituency: "  + constituencyId );
-        require(voters[aadharId].boothId == boothId, "Voter does not belong to booth no.: "+boothId );
+    function verifyToVote(uint boothId, uint constituencyId,uint aadharId) public{
+        require(officerToBooth[msg.sender].id == boothId && officerToBooth[msg.sender].constituencyId == constituencyId , "Action should be done at different Constituency or booth");
+        require(voters[aadharId].doesExist == true,"Voter not added to the voters list!");
+        require(voters[aadharId].constituencyId == constituencyId, "Voter does not belong to this constituency");
+        require(voters[aadharId].boothId == boothId, "Voter does not belong to this booth ");
     }
 
 }
@@ -155,94 +159,94 @@ contract Voting{
 // }
 
 
-contract Voting {
-    // an event that is called whenever a Candidate is added so the frontend could
-    // appropriately display the candidate with the right element id (it is used
-    // to vote for the candidate, since it is one of arguments for the function "vote")
-    event AddedCandidate(uint candidateID);
+// contract Voting {
+//     // an event that is called whenever a Candidate is added so the frontend could
+//     // appropriately display the candidate with the right element id (it is used
+//     // to vote for the candidate, since it is one of arguments for the function "vote")
+//     event AddedCandidate(uint candidateID);
 
-    // describes a Voter, which has an id and the ID of the candidate they voted for
-    address owner;
-    function Voting()public {
-        owner=msg.sender;
-    }
-    modifier onlyOwner {
-        require(msg.sender == owner);
-        _;
-    }
-    struct Voter {
-        bytes32 uid; // bytes32 type are basically strings
-        uint candidateIDVote;
-    }
-    // describes a Candidate
-    struct Candidate {
-        bytes32 name;
-        bytes32 party; 
-        // "bool doesExist" is to check if this Struct exists
-        // This is so we can keep track of the candidates 
-        bool doesExist; 
-    }
+//     // describes a Voter, which has an id and the ID of the candidate they voted for
+//     address owner;
+//     function Voting()public {
+//         owner=msg.sender;
+//     }
+//     modifier onlyOwner {
+//         require(msg.sender == owner);
+//         _;
+//     }
+//     struct Voter {
+//         bytes32 uid; // bytes32 type are basically strings
+//         uint candidateIDVote;
+//     }
+//     // describes a Candidate
+//     struct Candidate {
+//         bytes32 name;
+//         bytes32 party; 
+//         // "bool doesExist" is to check if this Struct exists
+//         // This is so we can keep track of the candidates 
+//         bool doesExist; 
+//     }
 
-    // These state variables are used keep track of the number of Candidates/Voters 
-    // and used to as a way to index them     
-    uint numCandidates; // declares a state variable - number Of Candidates
-    uint numVoters;
+//     // These state variables are used keep track of the number of Candidates/Voters 
+//     // and used to as a way to index them     
+//     uint numCandidates; // declares a state variable - number Of Candidates
+//     uint numVoters;
 
     
-    // Think of these as a hash table, with the key as a uint and value of 
-    // the struct Candidate/Voter. These mappings will be used in the majority
-    // of our transactions/calls
-    // These mappings will hold all the candidates and Voters respectively
-    mapping (uint => Candidate) candidates;
-    mapping (uint => Voter) voters;
+//     // Think of these as a hash table, with the key as a uint and value of 
+//     // the struct Candidate/Voter. These mappings will be used in the majority
+//     // of our transactions/calls
+//     // These mappings will hold all the candidates and Voters respectively
+//     mapping (uint => Candidate) candidates;
+//     mapping (uint => Voter) voters;
     
-    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-     *  These functions perform transactions, editing the mappings *
-     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+//     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+//      *  These functions perform transactions, editing the mappings *
+//      * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-    function addCandidate(bytes32 name, bytes32 party) onlyOwner public {
-        // candidateID is the return variable
-        uint candidateID = numCandidates++;
-        // Create new Candidate Struct with name and saves it to storage.
-        candidates[candidateID] = Candidate(name,party,true);
-        AddedCandidate(candidateID);
-    }
+//     function addCandidate(bytes32 name, bytes32 party) onlyOwner public {
+//         // candidateID is the return variable
+//         uint candidateID = numCandidates++;
+//         // Create new Candidate Struct with name and saves it to storage.
+//         candidates[candidateID] = Candidate(name,party,true);
+//         AddedCandidate(candidateID);
+//     }
 
-    function vote(bytes32 uid, uint candidateID) public {
-        // checks if the struct exists for that candidate
-        if (candidates[candidateID].doesExist == true) {
-            uint voterID = numVoters++; //voterID is the return variable
-            voters[voterID] = Voter(uid,candidateID);
-        }
-    }
+//     function vote(bytes32 uid, uint candidateID) public {
+//         // checks if the struct exists for that candidate
+//         if (candidates[candidateID].doesExist == true) {
+//             uint voterID = numVoters++; //voterID is the return variable
+//             voters[voterID] = Voter(uid,candidateID);
+//         }
+//     }
 
-    /* * * * * * * * * * * * * * * * * * * * * * * * * * 
-     *  Getter Functions, marked by the key word "view" *
-     * * * * * * * * * * * * * * * * * * * * * * * * * */
+//     /* * * * * * * * * * * * * * * * * * * * * * * * * * 
+//      *  Getter Functions, marked by the key word "view" *
+//      * * * * * * * * * * * * * * * * * * * * * * * * * */
     
 
-    // finds the total amount of votes for a specific candidate by looping
-    // through voters 
-    function totalVotes(uint candidateID) view public returns (uint) {
-        uint numOfVotes = 0; // we will return this
-        for (uint i = 0; i < numVoters; i++) {
-            // if the voter votes for this specific candidate, we increment the number
-            if (voters[i].candidateIDVote == candidateID) {
-                numOfVotes++;
-            }
-        }
-        return numOfVotes; 
-    }
+//     // finds the total amount of votes for a specific candidate by looping
+//     // through voters 
+//     function totalVotes(uint candidateID) view public returns (uint) {
+//         uint numOfVotes = 0; // we will return this
+//         for (uint i = 0; i < numVoters; i++) {
+//             // if the voter votes for this specific candidate, we increment the number
+//             if (voters[i].candidateIDVote == candidateID) {
+//                 numOfVotes++;
+//             }
+//         }
+//         return numOfVotes; 
+//     }
 
-    function getNumOfCandidates() public view returns(uint) {
-        return numCandidates;
-    }
+//     function getNumOfCandidates() public view returns(uint) {
+//         return numCandidates;
+//     }
 
-    function getNumOfVoters() public view returns(uint) {
-        return numVoters;
-    }
-    // returns candidate information, including its ID, name, and party
-    function getCandidate(uint candidateID) public view returns (uint,bytes32, bytes32) {
-        return (candidateID,candidates[candidateID].name,candidates[candidateID].party);
-    }
-}
+//     function getNumOfVoters() public view returns(uint) {
+//         return numVoters;
+//     }
+//     // returns candidate information, including its ID, name, and party
+//     function getCandidate(uint candidateID) public view returns (uint,bytes32, bytes32) {
+//         return (candidateID,candidates[candidateID].name,candidates[candidateID].party);
+//     }
+// }
