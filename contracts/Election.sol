@@ -12,40 +12,60 @@ contract Voting{
         uint voteCount;
         uint constituencyId;
         uint id;
+        bool doesExist;
     }
 
     struct Voter{
         Person person;
+        bool doesExist;
         bool isVoted;
         uint constituencyId;
         uint id;
         uint boothId;
     }
-    
+
     //Booth
     struct Booth{
         string boothAddress;
         uint boothId;
     }
+
     // Constituency
     struct Constituency{
         string name;
         uint id;
         Booth[] boothList;
+        bool doesExist;
     }
 
+    struct Officer{
+        Person person;
+        uint id;    
+        uint constituencyId;
+        uint boothId;
+        bool doesExist;
+    }
+
+
     mapping(uint => Candidate) candidates;
-    mapping(uint => uint)officerBoothList;
-    mapping(uint => Voter) voters;    
-    
+    mapping(address => Officer) officersList;
+    mapping(uint => Voter) voters;
+    mapping(string => uint) constituencyNameToId;
+
+
     uint votersCount;
     uint candidateCount;
+    uint constituencyCount;
 
-    function addCandidate(uint constituencyId,string memory name,uint aadharId) public {
+    function addCandidate(string memory constituencyName,string memory name,uint aadharId) public {
         // verify candidate
-        Person memory person = Person(name,aadharId);
+        require(officersList[msg.sender].doesExist == true,"Officer Not Authorized");
+        uint constituencyId = constituencyNameToId[constituencyName];
+        require(constituencyId > 0 && constituencyId <= constituencyCount,"Invalid Constituenc");
+        // check aadhar.
+        Person storage person = Person(name,aadharId);
         candidateCount++;
-        Candidate memory candidate = Candidate(person,0,constituencyId,candidateCount);
+        Candidate storage candidate = Candidate(person,0,constituencyId,candidateCount,true);
         candidates[candidate.id] = candidate;
     }
 
@@ -54,7 +74,7 @@ contract Voting{
 
     }
 
-    function addVoter(uint constituencyId,uint boothId,string memory name,uint aadharId) public {
+    function addVoter(string memory constituencyName,uint boothId,string memory name,uint aadharId) public {
         // verify voter age checking
         Person memory person = Person(name,aadharId);
         votersCount++;
@@ -77,7 +97,7 @@ contract Voting{
     }
 
     function verifyVoterBeforeVoting(uint boothId, uint constituencyId,uint aadharId) public{
-        require(voters[aadharId].doesExist==true,"Voter not added to the voters list!" );
+        require(voters[aadharId].doesExist == true,"Voter not added to the voters list!" );
         require(voters[aadharId].constituencyId == constituencyId, "Voter does not belong to this constituency: "  + constituencyId );
         require(voters[aadharId].boothId == boothId, "Voter does not belong to booth no.: "+boothId );
     }
@@ -121,7 +141,7 @@ contract Voting{
 //         require(!voters[msg.sender],"You have already voted!");
 
 //         // require a valid candidate
-//         require(_candidateId > 0 && _candidateId <= candidatesC  ount,"Candidate is not valid!");
+//         require(_candidateId > 0 && _candidateId <= candidatesCount,"Candidate is not valid!");
 
 //         // record that voter has voted
 //         voters[msg.sender] = true;
