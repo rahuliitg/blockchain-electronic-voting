@@ -59,6 +59,11 @@ contract Voting{
     uint candidateCount;
     uint constituencyCount;
 
+    constructor() public
+    {
+        constituencyCount = 0;
+    }
+
     function addCandidate(string memory constituencyName,string memory name,uint aadharId) public {
         // verify candidate
         require(officersList[msg.sender].doesExist == true,"Officer Not Authorized");
