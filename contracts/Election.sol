@@ -34,7 +34,6 @@ contract Voting{
         Booth[] boothList;
     }
 
-
     mapping(uint => Candidate) candidates;
     mapping(uint => uint)officerBoothList;
     mapping(uint => Voter) voters;    
@@ -56,29 +55,31 @@ contract Voting{
     }
 
     function addVoter(uint constituencyId,uint boothId,string memory name,uint aadharId) public {
-        // verify voter
+        // verify voter age checking
         Person memory person = Person(name,aadharId);
         votersCount++;
         //error in below line,, what is id in voter
         Voter memory voter = Voter(person,false,constituencyId,votersCount,boothId);
-        voters[voter.id] = voter;
+       //changed aadharid from voter.id,,coz of problem while verfying user
+        voters[aadharId] = voter;
     }
  
-    
     // Fuction to get voter details. 
 
     // register msg.sender
 
-    function vote(uint candidateId,uint voterId,uint ){
-        require(senders)
+    function vote (uint candidateId,uint voterId)public{
+        candidates[candidateId].voteCount += 1;
     }
 
-    function addOfficer(uint officerId, uint boothId){
+    function addOfficer (uint officerId, uint boothId)public{
         officerBoothList[boothId] = officerId;
     }
 
-    function verifyVoterBeforeVoting(uint boothId, uint constituencyId,uint aadharId){
-        voters[]
+    function verifyVoterBeforeVoting(uint boothId, uint constituencyId,uint aadharId) public{
+        require(voters[aadharId].doesExist==true,"Voter not added to the voters list!" );
+        require(voters[aadharId].constituencyId == constituencyId, "Voter does not belong to this constituency: "  + constituencyId );
+        require(voters[aadharId].boothId == boothId, "Voter does not belong to booth no.: "+boothId );
     }
 
 }
