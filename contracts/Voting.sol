@@ -55,12 +55,13 @@ contract Voting{
     mapping(uint => uint) boothCount;
     mapping(address => Booth) officerToBooth;
 
-    uint votersCount;
-    uint candidateCount;
-    uint constituencyCount;
+    uint public votersCount;
+    uint public candidateCount;
+    uint public constituencyCount;
 
     constructor() public
     {
+        
         constituencyCount = 0;
     }
 
