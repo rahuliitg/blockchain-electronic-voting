@@ -49,24 +49,25 @@ contract Voting{
 
 
     mapping(uint => Candidate) candidates;
-    mapping(address => Officer) officersList;
+    mapping(uint => Booth) officersList;
     mapping(uint => Voter) voters;
     mapping(string => uint) constituencyNameToId;
     mapping(uint => uint) boothCount;
     mapping(address => Booth) officerToBooth;
 
-    uint votersCount;
-    uint candidateCount;
-    uint constituencyCount;
+    uint public votersCount;
+    uint public candidateCount;
+    uint public constituencyCount;
 
     constructor() public
     {
+        
         constituencyCount = 0;
     }
 
     function addCandidate(string memory constituencyName,string memory name,uint aadharId) public {
         // verify candidate
-        require(officersList[msg.sender].doesExist == true,"Officer Not Authorized");
+        //require(officersList[msg.sender].doesExist == true,"Officer Not Authorized");
         uint constituencyId = constituencyNameToId[constituencyName];
         require(constituencyId > 0 && constituencyId <= constituencyCount,"Invalid Constituenc");
         // check aadhar.
