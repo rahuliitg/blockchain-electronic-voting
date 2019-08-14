@@ -36,54 +36,56 @@ contract Voting{
     struct Constituency{
         string name;
         uint id;
-        uint[] boothId;
+        uint[] boothList;
         bool doesExist;
     }
-    
 
     struct Officer{
         Person person;
         uint id;
-        uint constituencyId;
         uint boothId;
         bool doesExist;
     }
 
 
     mapping(uint => Candidate) candidates;
-    mapping(uint => Booth) officersList;
+    mapping(uint => Officer) officersList;
     mapping(uint => Voter) voters;
     mapping(uint => Constituency) constituencyList;
     mapping(uint => Booth) boothList;
     mapping(string => uint) constituencyNameToId;
-<<<<<<< HEAD
-    mapping(address => Booth) officerToBooth;
-=======
-    mapping(uint => uint) boothCount;
     mapping(address => Booth) machineToBooth;
->>>>>>> 1ceb00b61a8e593a62325c1eb918f67aa86ecbda
 
+    uint public boothCount;
     uint public votersCount;
     uint public candidateCount;
     uint public constituencyCount;
+    uint public officerCount;
 
     constructor() public
     {
-        
-        addConstituency("Guwahati",[]);
-        addBooth("GS-Road",1);        
+        uint[] memory boothId;
+        addConstituency("Guwahati",boothId);
+        addBooth("GS-Road",1);
+        addOfficer("Ashish",12345678,1);
     }
 
-    function addBooth(string boothAddress,uint constituencyId){
+    function addBooth(string memory boothAddress,uint constituencyId)public {
         boothCount++;
         boothList[boothCount] = Booth(boothAddress,boothCount,constituencyId,true);
-        constituencyList[constituencyId].push(boothId);
+        constituencyList[constituencyId].boothList.push(boothCount);
     }
 
-    function addConstituency(string memory name,uint [] boothId){
+    function addConstituency(string memory name,uint[] memory boothId) public {
         constituencyCount++;
         constituencyList[constituencyCount] = Constituency(name,constituencyCount,boothId,true);
         constituencyNameToId[name] = constituencyCount;
+    }
+
+    function addOfficer(string memory name,uint aadharId,uint boothId) public{
+        Person memory person = Person(name,aadharId);
+        officerCount++;
+        officersList[aadharId] = Officer(person,officerCount,boothId,true);
     }
 
     function addCandidate(string memory constituencyName,string memory name,uint aadharId) public {
@@ -106,7 +108,7 @@ contract Voting{
     function addVoter(string memory constituencyName,uint boothId,string memory name,uint aadharId) public {
         uint constituencyId = constituencyNameToId[constituencyName];
         require(constituencyId > 0 && constituencyId <= constituencyCount,"Invalid Constituency");
-        require(boothId > 0 && boothId <= boothCount[constituencyId], "Invalid Booth");
+        require(boothId > 0 && boothId <= constituencyList[constituencyId].boothList.length, "Invalid Booth");
         // verify aadhar.
         // verify voter age checking
         Person memory person = Person(name,aadharId);
@@ -121,25 +123,20 @@ contract Voting{
 
     // register msg.sender
 
-    function vote (uint candidateId,uint aadharId)public{
+    function vote(uint candidateId,uint aadharId)public{
         candidates[candidateId].voteCount += 1;
-        require(machineToBooth[msg.sender]
+        require(machineToBooth[msg.sender].doesExist == true);
     }
 
     function verifyToVote(uint boothId, uint constituencyId,uint aadharId) public{
-<<<<<<< HEAD
-        require(machineToBooth[msg.sender].doesExist == true && machineToBooth[msg.sender].id == boothId && officerToBooth[msg.sender].constituencyId == constituencyId , "Action should be done at different Constituency or booth");
-=======
-        require(machineToBooth[msg.sender].id == boothId && machineToBooth[msg.sender].constituencyId == constituencyId ,
-         "Action should be done at different Constituency or booth");
->>>>>>> 1ceb00b61a8e593a62325c1eb918f67aa86ecbda
+        require(machineToBooth[msg.sender].doesExist == true && machineToBooth[msg.sender].id == boothId && machineToBooth[msg.sender].constituencyId == constituencyId , "Action should be done at different Constituency or booth");
         require(voters[aadharId].doesExist == true,"Voter not added to the voters list!");
         require(voters[aadharId].constituencyId == constituencyId, "Voter does not belong to this constituency");
         require(voters[aadharId].boothId == boothId, "Voter does not belong to this booth ");
     }
     function verifyOfficer(uint aadharId) public{
         require(officersList[aadharId].doesExist == true,"Invalid Officer");
-        machineToBooth[msg.sender] = officersList[aadharId];
+        machineToBooth[msg.sender].id = officersList[aadharId].boothId;
     }
 
 }
