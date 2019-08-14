@@ -46,7 +46,9 @@ contract Voting{
         uint boothId;
         bool doesExist;
     }
-
+    struct Results{
+        mapping (uint => Candidate[]) constituencyIdtoSortedList;
+    }
 
     mapping(uint => Candidate) candidates;
     mapping(uint => Officer) officersList;
@@ -54,6 +56,10 @@ contract Voting{
     mapping(uint => Constituency) constituencyList;
     mapping(uint => Booth) boothList;
     mapping(string => uint) constituencyNameToId;
+<<<<<<< HEAD
+=======
+    mapping(uint => uint) boothCount;
+>>>>>>> 8ae79d9b8b33a925716b6d3323a14820c15259eb
     mapping(address => Booth) machineToBooth;
 
     uint public boothCount;
@@ -128,17 +134,29 @@ contract Voting{
         require(machineToBooth[msg.sender].doesExist == true);
     }
 
-    function verifyToVote(uint boothId, uint constituencyId,uint aadharId) public{
-        require(machineToBooth[msg.sender].doesExist == true && machineToBooth[msg.sender].id == boothId && machineToBooth[msg.sender].constituencyId == constituencyId , "Action should be done at different Constituency or booth");
+    function verifyToVote(uint boothId, uint constituencyId,uint aadharId) public view returns (bool)  {
+        require(machineToBooth[msg.sender].doesExist == true && machineToBooth[msg.sender].id == boothId && officerToBooth[msg.sender].constituencyId == constituencyId , "Action should be done at different Constituency or booth");
+        require(machineToBooth[msg.sender].id == boothId && machineToBooth[msg.sender].constituencyId == constituencyId ,
+         "Action should be done at different Constituency or booth");
         require(voters[aadharId].doesExist == true,"Voter not added to the voters list!");
         require(voters[aadharId].constituencyId == constituencyId, "Voter does not belong to this constituency");
         require(voters[aadharId].boothId == boothId, "Voter does not belong to this booth ");
+        return true;
     }
-    function verifyOfficer(uint aadharId) public{
+    function verifyOfficer(uint aadharId) public returns (bool){
         require(officersList[aadharId].doesExist == true,"Invalid Officer");
         machineToBooth[msg.sender].id = officersList[aadharId].boothId;
     }
+    function results(uint constituencyId) public view returns (uint){
+        uint maxVotes = 0;
+        uint maxId;
+        for(uint i = 0; i<candidateCount; i++){
+            if(candidates[i].constituencyId == constituencyId && maxVotes <= candidates[i].voteCount){
+                maxId = candidates[i].id;
+            }
+        }
 
+    }
 }
 
 
