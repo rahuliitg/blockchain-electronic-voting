@@ -36,9 +36,10 @@ contract Voting{
     struct Constituency{
         string name;
         uint id;
-        Booth[] boothList;
+        uint[] boothId;
         bool doesExist;
     }
+    
 
     struct Officer{
         Person person;
@@ -54,6 +55,8 @@ contract Voting{
     mapping(uint => Candidate) candidates;
     mapping(uint => Booth) officersList;
     mapping(uint => Voter) voters;
+    mapping(uint => Constituency) constituencyList;
+    mapping(uint => Booth) boothList;
     mapping(string => uint) constituencyNameToId;
     mapping(uint => uint) boothCount;
     mapping(address => Booth) machineToBooth;
@@ -65,7 +68,20 @@ contract Voting{
     constructor() public
     {
         
-        constituencyCount = 0;
+        addConstituency("Guwahati",[]);
+        addBooth("GS-Road",1);        
+    }
+
+    function addBooth(string boothAddress,uint constituencyId){
+        boothCount++;
+        boothList[boothCount] = Booth(boothAddress,boothCount,constituencyId,true);
+        constituencyList[constituencyId].push(boothId);
+    }
+
+    function addConstituency(string memory name,uint [] boothId){
+        constituencyCount++;
+        constituencyList[constituencyCount] = Constituency(name,constituencyCount,boothId,true);
+        constituencyNameToId[name] = constituencyCount;
     }
 
     function addCandidate(string memory constituencyName,string memory name,uint aadharId) public {
@@ -103,11 +119,13 @@ contract Voting{
 
     // register msg.sender
 
-    function vote (uint candidateId,uint voterId) public{
+    function vote (uint candidateId,uint aadharId)public{
         candidates[candidateId].voteCount += 1;
+        require(machineToBooth[msg.sender]
     }
 
     function verifyToVote(uint boothId, uint constituencyId,uint aadharId) public view returns (bool)  {
+        require(machineToBooth[msg.sender].doesExist == true && machineToBooth[msg.sender].id == boothId && officerToBooth[msg.sender].constituencyId == constituencyId , "Action should be done at different Constituency or booth");
         require(machineToBooth[msg.sender].id == boothId && machineToBooth[msg.sender].constituencyId == constituencyId ,
          "Action should be done at different Constituency or booth");
         require(voters[aadharId].doesExist == true,"Voter not added to the voters list!");
