@@ -29,6 +29,7 @@ contract Voting{
         string boothAddress;
         uint id;
         uint constituencyId;
+        bool doesExist;
     }
 
     // Constituency
@@ -53,7 +54,7 @@ contract Voting{
     mapping(uint => Voter) voters;
     mapping(string => uint) constituencyNameToId;
     mapping(uint => uint) boothCount;
-    mapping(address => Booth) officerToBooth;
+    mapping(address => Booth) machineToBooth;
 
     uint public votersCount;
     uint public candidateCount;
@@ -83,7 +84,6 @@ contract Voting{
     // }
 
     function addVoter(string memory constituencyName,uint boothId,string memory name,uint aadharId) public {
-        require(officersList[msg.sender].doesExist == true,"Officer Not Authorized");
         uint constituencyId = constituencyNameToId[constituencyName];
         require(constituencyId > 0 && constituencyId <= constituencyCount,"Invalid Constituency");
         require(boothId > 0 && boothId <= boothCount[constituencyId], "Invalid Booth");
@@ -106,10 +106,15 @@ contract Voting{
     }
 
     function verifyToVote(uint boothId, uint constituencyId,uint aadharId) public{
-        require(officerToBooth[msg.sender].id == boothId && officerToBooth[msg.sender].constituencyId == constituencyId , "Action should be done at different Constituency or booth");
+        require(machineToBooth[msg.sender].id == boothId && machineToBooth[msg.sender].constituencyId == constituencyId ,
+         "Action should be done at different Constituency or booth");
         require(voters[aadharId].doesExist == true,"Voter not added to the voters list!");
         require(voters[aadharId].constituencyId == constituencyId, "Voter does not belong to this constituency");
         require(voters[aadharId].boothId == boothId, "Voter does not belong to this booth ");
+    }
+    function verifyOfficer(uint aadharId) public{
+        require(officersList[aadharId].doesExist == true,"Invalid Officer");
+        machineToBooth[msg.sender] = officersList[aadharId];
     }
 
 }
