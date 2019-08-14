@@ -47,7 +47,9 @@ contract Voting{
         uint boothId;
         bool doesExist;
     }
-
+    struct Results{
+        mapping (uint => Candidate[]) constituencyIdtoSortedList;
+    }
 
     mapping(uint => Candidate) candidates;
     mapping(uint => Booth) officersList;
@@ -101,22 +103,33 @@ contract Voting{
 
     // register msg.sender
 
-    function vote (uint candidateId,uint voterId)public{
+    function vote (uint candidateId,uint voterId) public{
         candidates[candidateId].voteCount += 1;
     }
 
-    function verifyToVote(uint boothId, uint constituencyId,uint aadharId) public{
+    function verifyToVote(uint boothId, uint constituencyId,uint aadharId) public view returns (bool)  {
         require(machineToBooth[msg.sender].id == boothId && machineToBooth[msg.sender].constituencyId == constituencyId ,
          "Action should be done at different Constituency or booth");
         require(voters[aadharId].doesExist == true,"Voter not added to the voters list!");
         require(voters[aadharId].constituencyId == constituencyId, "Voter does not belong to this constituency");
         require(voters[aadharId].boothId == boothId, "Voter does not belong to this booth ");
+        return true;
     }
-    function verifyOfficer(uint aadharId) public{
+    function verifyOfficer(uint aadharId) public returns (bool){
         require(officersList[aadharId].doesExist == true,"Invalid Officer");
         machineToBooth[msg.sender] = officersList[aadharId];
+        return true;
     }
+    function results(uint constituencyId) public view returns (uint){
+        uint maxVotes = 0;
+        uint maxId;
+        for(uint i = 0; i<candidateCount; i++){
+            if(candidates[i].constituencyId == constituencyId && maxVotes <= candidates[i].voteCount){
+                maxId = candidates[i].id;
+            }
+        }
 
+    }
 }
 
 
