@@ -9,6 +9,15 @@
   "installed_plugins": {
     "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "com.blockchain.eVoting"
+    },
+    "cordova-plugin-barcodescanner": {
+      "PACKAGE_NAME": "com.blockchain.eVoting"
+    },
+    "cordova-plugin-android-fingerprint-auth": {
+      "PACKAGE_NAME": "com.blockchain.eVoting"
+    },
+    "cordova-plugin-qrscanner": {
+      "PACKAGE_NAME": "com.blockchain.eVoting"
     }
   },
   "dependent_plugins": {}

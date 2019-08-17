@@ -1,0 +1,71 @@
+{
+  "_from": "cordova-plugin-barcodescanner@next",
+  "_id": "cordova-plugin-barcodescanner@0.7.0-21",
+  "_inBundle": false,
+  "_integrity": "sha1-oDmskzOG96x0iKMfCc9CZMYjEkU=",
+  "_location": "/cordova-plugin-barcodescanner",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "cordova-plugin-barcodescanner@next",
+    "name": "cordova-plugin-barcodescanner",
+    "escapedName": "cordova-plugin-barcodescanner",
+    "rawSpec": "next",
+    "saveSpec": null,
+    "fetchSpec": "next"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-barcodescanner/-/cordova-plugin-barcodescanner-0.7.0-21.tgz",
+  "_shasum": "a039ac933386f7ac7488a31f09cf4264c6231245",
+  "_spec": "cordova-plugin-barcodescanner@next",
+  "_where": "C:\\Users\\Ashish Ranjan\\Desktop\\blockchain-electronic-voting-master\\eVoting",
+  "author": {
+    "name": "Martin Reinhardt"
+  },
+  "bugs": {
+    "url": "https://github.com/hypery2k/cordova-barcodescanner-plugin/issues"
+  },
+  "bundleDependencies": false,
+  "cordova": {
+    "id": "cordova-plugin-barcodescanner",
+    "platforms": [
+      "android",
+      "ios",
+      "wp8",
+      "windows8"
+    ]
+  },
+  "deprecated": false,
+  "description": "Cordova Barcode Scanner Plugin",
+  "devDependencies": {
+    "jsdoc": "3.4.2",
+    "jsdoc-to-markdown": "3.0.0"
+  },
+  "homepage": "https://github.com/hypery2k/cordova-barcodescanner-plugin#readme",
+  "keywords": [
+    "cordova",
+    "barcodescanner",
+    "ecosystem:cordova",
+    "cordova-android",
+    "cordova-ios",
+    "cordova-osx",
+    "cordova-wp8",
+    "cordova-windows8"
+  ],
+  "license": "MIT",
+  "name": "cordova-plugin-barcodescanner",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hypery2k/cordova-barcodescanner-plugin.git"
+  },
+  "scripts": {
+    "posttest": "jsdoc -c jsdoc.json && jsdoc2md www/barcodescanner.js | sed s/barcodeScannerPlugin/cordova.plugins.barcodeScanner/g | sed s/barcodeScannerPlugin/cordova.plugins.barcodeScanner/g > PLUGIN_USAGE.MD",
+    "pretest": "rm -rf tmp && mkdir -p tmp && cd tmp && git clone https://github.com/simpligility/maven-android-sdk-deployer.git && cd maven-android-sdk-deployer/ && mvn install -P 6.0 && ls ~/.m2/repository/android/android/",
+    "test": "cd tmp && git clone https://github.com/hypery2k/cordova-demo-app.git && cd cordova-demo-app && npm install && npm run build && cordova platform add ${PLATFORM} && cordova plugin add cordova-plugin-compat && cordova build && cordova plugin add ../.. && cordova build"
+  },
+  "version": "0.7.0-21"
+}

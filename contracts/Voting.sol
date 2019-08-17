@@ -68,6 +68,7 @@ contract Voting{
    uint public constituencyCount;
    uint public officerCount;
 
+    event voteCast(address sender);
 
    constructor() public
    {
@@ -97,6 +98,8 @@ contract Voting{
    }
  
    function addCandidate(string memory constituencyName,string memory name,uint aadharId) public {
+              emit voteCast(msg.sender);
+
        // verify candidate
        //require(officersList[msg.sender].doesExist == true,"Officer Not Authorized");
        uint constituencyId = constituencyNameToId[constituencyName];
@@ -155,10 +158,10 @@ contract Voting{
        machineToBooth[msg.sender] = officersList[aadharId].boothId;
        return true;
    }
-   funciton finfishVoting(){
-       require(State==StateType.Voting,"Invalid State");
-       State = StateType.Result;
-   }
+//    funciton finfishVoting () public{
+//        require(State==StateType.Voting,"Invalid State");
+//        State = StateType.Result;
+//    }
    function results(uint constituencyId) public view returns (uint){
        uint maxVotes = 0;
        uint maxId;

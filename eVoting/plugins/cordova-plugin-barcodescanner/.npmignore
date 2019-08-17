@@ -1,0 +1,9 @@
+.DS_Store
+bin/
+.classpath
+.project
+.idea/*
+*.log
+test/android/.gradle/*
+tmp/*
+test/android/build/*
