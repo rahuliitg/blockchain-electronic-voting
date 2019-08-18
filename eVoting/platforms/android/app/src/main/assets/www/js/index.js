@@ -35,11 +35,24 @@ var app = {
         function onDone(err, status){
           if (err) {
            // here we can handle errors and clean up any loose ends.
-           console.error(err);
+           alert(err);
           }
           if (status.authorized) {
             // W00t, you have camera access and the scanner is initialized.
             // QRscanner.show() should feel very fast.
+            QRScanner.scan(displayContents);
+ 
+            function displayContents(err, text){
+            if(err){
+                // an error occurred, or the scan was canceled (error code `6`)
+            } else {
+                // The scan completed, display the contents of the QR code:
+                alert(text);
+            }
+            }
+            
+            // Make the webview transparent so the video preview is visible behind it.
+            QRScanner.show();
           } else if (status.denied) {
            // The video preview will remain black, and scanning is disabled. We can
            // try to ask the user to change their mind, but we'll have to send them

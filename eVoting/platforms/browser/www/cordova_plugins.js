@@ -1,14 +1,6 @@
 cordova.define('cordova/plugin_list', function(require, exports, module) {
 module.exports = [
     {
-        "file": "plugins/cordova-plugin-barcodescanner/www/barcodescanner.js",
-        "id": "cordova-plugin-barcodescanner.BarcodeScanner",
-        "pluginId": "cordova-plugin-barcodescanner",
-        "clobbers": [
-            "cordova.plugins.barcodeScanner"
-        ]
-    },
-    {
         "file": "plugins/cordova-plugin-android-fingerprint-auth/www/FingerprintAuth.js",
         "id": "cordova-plugin-android-fingerprint-auth.FingerprintAuth",
         "pluginId": "cordova-plugin-android-fingerprint-auth",
@@ -35,8 +27,6 @@ module.exports.metadata =
 // TOP OF METADATA
 {
     "cordova-plugin-whitelist": "1.3.4",
-    "cordova-plugin-compat": "1.2.0",
-    "cordova-plugin-barcodescanner": "0.8.0",
     "cordova-plugin-android-fingerprint-auth": "1.5.0",
     "cordova-plugin-qrscanner": "3.0.1"
 }
