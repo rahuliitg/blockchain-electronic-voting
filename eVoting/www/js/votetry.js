@@ -16362,26 +16362,62 @@ var json = JSON.parse(JSON.stringify({
 var MyContract = TruffleContract(json);
 MyContract.setProvider(provider);
 console.log(MyContract);
-var deployed;
+var Election;
 var account;
-
+var constCount=0;
 var accounts = web3.eth.getAccounts((error,result) => {
   if (error) {
       console.log(error);
   } else {
-      web3.personal.unlockAccount(result[0],"Rahulgupta@12345", 15000, function(){
-        MyContract.deployed().then(function(instance) {
-          deployed = instance;
-        }).then(function(result) {
-          console.log("success");
-        });
-      });    
+      web3.personal.unlockAccount(result[0],"Rahulgupta@12345", 15000);
   }
 });
 
 function gotoAddVoterPage(){
-  (document.getElementsByClassName("introPage")[0]).display = none;
-  (document.getElementsByClassName("voterLoginPage")[0]).display = none;
-
+  (document.getElementsByClassName("introPage")[0]).style.display = "none";
+  (document.getElementById("id01")).style.display = "block";
+  MyContract.deployed().then(function(instance) {
+    Election = instance;
+    return Election.constituencyCount();
+  }).then(function(constCount){
+    for(i = 1 ;i <= constCount; i++){
+      Election.constituencyList(i).then(function(f){
+        console.log(f[0]);
+        var option = document.createElement("option");
+        option.value = f[1];
+        option.text = f[0];
+        //add this functionality one mitanshu make changes in solidity file//
+        option.setAttribute("boothcount",1)
+        var select = document.getElementById("constituencyList");
+        select.appendChild(option);
+      })
+    }
+  })
 }
-     
+var constiName;
+var boothId;
+var voterName;
+var aadharId;
+function loadBoothList(x){
+  alert("hi")
+  var boothCount = x.options[x.selectedIndex].getAttribute('boothcount');
+  constiName = x.options[x.selectedIndex].innerText;
+  console.log(Election.address);
+  document.getElementById("boothList").innerHTML = "";
+  var option = document.createElement("option");
+  option.text = "None";
+  var select = document.getElementById("boothList");
+  select.appendChild(option);
+  for(i = 1; i<=x.boothCount; i++){
+    //add booths to option
+  }
+}
+
+//incomplete
+function voterAdd(){
+  voterName = document.getElementById("voterName").innerText;
+  aadharId = document.getElementById("voterAadhar".innerText);
+  Election.addVoter(constiName, boothId, voterName, aadharId, {from:account}).then(function(f){
+    //gotoHomepage show success
+  })
+}
