@@ -16378,4 +16378,10 @@ var accounts = web3.eth.getAccounts((error,result) => {
       });    
   }
 });
+
+function gotoAddVoterPage(){
+  (document.getElementsByClassName("introPage")[0]).display = none;
+  (document.getElementsByClassName("voterLoginPage")[0]).display = none;
+
+}
      
