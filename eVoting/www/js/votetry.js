@@ -16398,18 +16398,19 @@ var constiName;
 var boothId;
 var voterName;
 var aadharId;
-function loadBoothList(x){
-  alert("hi")
-  var boothCount = x.options[x.selectedIndex].getAttribute('boothcount');
-  constiName = x.options[x.selectedIndex].innerText;
-  console.log(Election.address);
+var pincode;
+var yob;
+function loadBoothList(id){
+  // var boothCount = x.options[x.selectedIndex].getAttribute('boothcount');
+  // constiName = x.options[x.selectedIndex].innerText;
+  // console.log(Election.address);
   document.getElementById("boothList").innerHTML = "";
   var option = document.createElement("option");
   option.text = "None";
   var select = document.getElementById("boothList");
   select.appendChild(option);
   for(i = 1; i<=x.boothCount; i++){
-    //add booths to option
+    Election.
   }
 }
 
@@ -16421,3 +16422,37 @@ function voterAdd(){
     //gotoHomepage show success
   })
 }
+
+function scan()
+{
+    cordova.plugins.barcodeScanner.scan(
+        function (result) {
+            if(!result.cancelled)
+            {
+                if(result.format == "QR_CODE")
+                {
+                        var value = result.text;
+                        value = value.split("\"");
+                        aadharId = value[5];
+                        name = value[7];
+                        yob = value[11];
+                        for(var i=value.length-1;i>=0;--i){
+                            if(value[i]==" pc="){
+                                pincode = value[i+1];
+                                break;
+                            }
+                        }
+                        //getconstituency from pincode
+                        document.getElementById("name").innerHTML = name;
+                        document.getElementById("aadharId").innerHTML = aadharId;
+                        document.getElementById("constituency").innerHTML = pincode;
+                        loadBoothList(1);
+                }
+            }
+        },
+        function (error) {
+            alert("Scanning failed: " + error);
+        }
+);
+}
+  
