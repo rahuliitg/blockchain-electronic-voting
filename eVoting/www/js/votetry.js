@@ -14533,6 +14533,8 @@ function officerScan()
                                 document.getElementById("officerBooth").value = boothName;
                               })
                             })
+                        }).catch(error=>{
+                          alert(error);
                         })
                 }
             }
