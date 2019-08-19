@@ -16410,7 +16410,7 @@ function loadBoothList(id){
   var select = document.getElementById("boothList");
   select.appendChild(option);
   for(i = 1; i<=x.boothCount; i++){
-    Election.
+    
   }
 }
 
@@ -16446,7 +16446,7 @@ function scan()
                         document.getElementById("name").innerHTML = name;
                         document.getElementById("aadharId").innerHTML = aadharId;
                         document.getElementById("constituency").innerHTML = pincode;
-                        loadBoothList(1);
+                        loadBoothList(1,1);
                 }
             }
         },
