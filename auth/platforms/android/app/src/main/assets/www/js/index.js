@@ -61,13 +61,12 @@ function scan()
             {
                 if(result.format == "QR_CODE")
                 {
-                  
                         // var name = input.input1;
                         var value = result.text;
 
-                        var data = localStorage.getItem("LocalData");
+                        // var data = localStorage.getItem("LocalData");
                         // console.log(data);
-                        alert(value);
+                        // alert(value);
                         // alert(typeof value );
                         value = value.split("\"");
                         // alert("split");
@@ -86,17 +85,10 @@ function scan()
                             }
                         }
 
-                        alert(aadharId);
-                        alert(name);
-                        alert(yob);
-                        alert(pincode);
-
-                        data = JSON.parse(data);
-                        data[data.length] = [name, value];
-
-                        localStorage.setItem("LocalData", JSON.stringify(data));
-
-                        alert("Done");
+                // alert(aadharId);
+                //         alert(name);
+                //         alert(yob);
+                //         alert(pincode);        
                   
                 }
             }

@@ -4,8 +4,8 @@
     <script src="js/web3.min.js"></script>
     <script src="js/truffle-contract.js"></script>
     <script type="text/javascript" src="js/votetry.js"></script>
-    <!-- <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-    <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script> -->
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script> 
     <!-- <script type="text/javascript" src="cordova.js"></script> -->
     <head>
         <title>E-Voting</title>
@@ -170,7 +170,9 @@ span.psw {
                   <input type="text" placeholder="Enter aadhar no" value="" id="candidateAadhar" required >
 
                   <label ><b>Constituency</b></label>
-                  <input type="text" id="candidateConstituency" value=""  placeholder="constituency Name" required>
+                  <select type="text" id="candidateConstituency" value=""  placeholder="constituency Name" >
+                    <option text="None"></option>
+                  </select>
                   <br/><br/>
                   <div style="background-color: #4CAF50;margin-top:5px;width:120px;height: 40px;cursor: pointer;padding-top:15px;;padding-left:10px;color:white;font-size:30px" onclick="candidateAdd()">Add Candidate</button>
                 </div>
