@@ -42,16 +42,17 @@ contract Voting{
     }
 
     struct Officer{
-        Person person;
+        string name;
+        uint aadharId;
         uint id;
         uint boothId;
         bool doesExist;
     }
 
 
-    mapping(uint => Candidate) candidates;
-    mapping(uint => Officer) officersList; // aadhar
-    mapping(uint => Voter)  voters; //aadhar
+    mapping(uint => Candidate) public candidates;
+    mapping(uint => Officer) public officersList; // aadhar
+    mapping(uint => Voter)  public voters; //aadhar
     mapping(uint => Constituency) public constituencyList;
     mapping(uint => Booth) public boothList;
     mapping(string => uint)  constituencyNameToId;
@@ -77,7 +78,10 @@ contract Voting{
         addBooth("GS-Road",1);
         addOfficer("Rahul Kumar Gupta",910611041461,1);
         State = StateType.PreVoting;
+        pinToConstituency[301001] = constituencyList[1];
         pinToConstituency[456789] = constituencyList[1];
+        pinToConstituency[827004] = constituencyList[1];
+        pinToConstituency[307027] = constituencyList[1];
     }
 
     function addBooth(string memory boothAddress,uint constituencyId)public {
@@ -97,9 +101,8 @@ contract Voting{
     }
 
     function addOfficer(string memory name,uint aadharId,uint boothId) public{
-        Person memory person = Person(name,aadharId);
         officerCount++;
-        officersList[aadharId] = Officer(person,officerCount,boothId,true);
+        officersList[aadharId] = Officer(name,aadharId,officerCount,boothId,true);
     }
 
     function addCandidate(string memory constituencyName,string memory name,uint aadharId) public {
