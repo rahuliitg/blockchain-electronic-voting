@@ -5,6 +5,7 @@ var aadharId;
 var pincode;
 var yob;
 var json;
+var candidateId;
 provider = new Web3.providers.HttpProvider('https://rahul.blockchain.azure.com:3200/z_-OS0Fjm8ArG7BO_9eIY4Ye');
 web3 = new Web3(provider);
 
@@ -14554,7 +14555,7 @@ function candidateAdd(){
   var candName = document.getElementById("candidateName").value;
   var candAadhar = document.getElementById("candidateAadhar").value;
   var candConstituency = document.getElementById("candidateConstituency").value;
-  Election.candidateAdd(candConstituency,candName,parseInt(candAadhar), {from:account, gas:300000}).then(function(f){
+  Election.addCandidate(candConstituency,candName,parseInt(candAadhar), {from:account, gas:300000}).then(function(f){
     alert("success candidate add .. redirect to home page");
     (document.getElementsByClassName("introPage")[0]).style.display = "block";
     (document.getElementById("id03")).style.display = "none"; 
@@ -14562,6 +14563,16 @@ function candidateAdd(){
     document.getElementById("candidateAadhar").value = "";   
     document.getElementById("candidateConstituency").value = "";   
   }).catch(error=>{
+    alert(error);
+  })
+}
+
+function getResult(candidateId){
+  Election.getResults(constituencyId,  {from:account, gas:300000})
+  .then(function(result){
+    alert("getResult was success");
+
+  }).catch(error =>{
     alert(error);
   })
 }
