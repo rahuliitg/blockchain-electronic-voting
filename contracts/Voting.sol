@@ -9,7 +9,8 @@ contract Voting{
     }
 
     struct Candidate{
-        Person person;
+        string name;
+        uint aadharId;
         uint voteCount;
         uint constituencyId;
         uint id;
@@ -39,6 +40,7 @@ contract Voting{
         uint id;
         uint boothCount;
         bool doesExist;
+        uint candidateCount;
     }
 
     struct Officer{
@@ -59,7 +61,7 @@ contract Voting{
     mapping(address => uint) public machineToBooth;
     mapping(uint => Booth[]) public constituencyToBooth;
     mapping(uint => Constituency) public pinToConstituency;
-
+    mapping (uint => Candidate[]) constituencyToCandidate;
     enum StateType { PreVoting, Voting, Result}
 
     //List of properties
@@ -75,13 +77,20 @@ contract Voting{
     constructor() public
     {
         addConstituency("Guwahati");
+        addConstituency("Sheoganj");
         addBooth("GS-Road",1);
-        addOfficer("Rahul Kumar Gupta",910611041461,1);
+        addBooth("Paltan Bazar",1);
+        addBooth("Nagar Palika",2);
+        addOfficer("Kartikey Kant",732449600739,1);
+        addOfficer("Ashish Ranjan", 575848571904, 2);
+        addOfficer("Mitanshu Mittal", 293274081107, 3);
         State = StateType.PreVoting;
         pinToConstituency[301001] = constituencyList[1];
         pinToConstituency[456789] = constituencyList[1];
         pinToConstituency[827004] = constituencyList[1];
         pinToConstituency[307027] = constituencyList[1];
+        pinToConstituency[132105] = constituencyList[1];
+        
     }
 
     function addBooth(string memory boothAddress,uint constituencyId)public {
@@ -93,7 +102,7 @@ contract Voting{
 
     function addConstituency(string memory name) public {
         constituencyCount++;
-        constituencyList[constituencyCount] = Constituency(name,constituencyCount,0,true);
+        constituencyList[constituencyCount] = Constituency(name,constituencyCount,0,true,0);
         constituencyNameToId[name] = constituencyCount;
     //    for(uint i = 0;i < boothId.length;++i){
     //        constituencyToBooth[constituencyCount].push(boothId[i]);
@@ -113,9 +122,11 @@ contract Voting{
         uint constituencyId = constituencyNameToId[constituencyName];
         require(constituencyId > 0 && constituencyId <= constituencyCount,"Invalid Constituency");
         // check aadhar.
-        Person memory person = Person(name,aadharId);
+        // Person memory person = Person(name,aadharId);
         candidateCount++;
-        candidates[candidateCount] = Candidate(person,0,constituencyId,candidateCount,true);
+        candidates[candidateCount] = Candidate(name,aadharId,0,constituencyId,candidateCount,true);
+        constituencyToCandidate[constituencyId].push(candidates[candidateCount]);
+        constituencyList[constituencyId].candidateCount++;
     }
 
     // // update candidate
@@ -180,7 +191,6 @@ contract Voting{
 
 
         // mapping (uint => Candidate[]) result;
-        mapping (uint => Candidate[]) constituencyToCandidate;
         // Candidate[] result;
 
     event Result(

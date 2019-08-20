@@ -150,7 +150,7 @@ span.psw {
                   <label ><b>Booth</b></label>
                   <input type="text" id="officerBooth" value="" placeholder="boothName" disabled>
                   <br/>
-                  <div style="background-color: #4CAF50;margin-top:5px;width:120px;height: 40px;cursor: pointer;padding-top:15px;;padding-left:10px;color:white;font-size:30px" onclick="voterAdd()">Submit</button>
+                  <div style="background-color: #4CAF50;margin-top:5px;width:120px;height: 40px;cursor: pointer;padding-top:15px;;padding-left:10px;color:white;font-size:30px" onclick="showVotingPage()">Submit</button>
                 </div>
               </div>
               </div>
@@ -179,6 +179,23 @@ span.psw {
                 </div>
               </div>
               </div>
-        </div>
+            </div>
+            <div id = "votingPage"style="display: none">
+              <div id="constDetails" style="background-color: wheat;height:50px;width:400px;margin-top:5px;margin-bottom:5px;font-weight: 50px"></div>
+              <div id="boothDetails" style="background-color: wheat;height:50px;width:400px;margin-bottom:10px;font-weight: 50px"></div>
+              <div id="vote" style="background-color: chocolate;color:white;width:400px;height: 90px;text-align: center;padding-top:50px;left:40%;top:30%" onclick="scanToVote()">Scan Voters aadhar card to vote</div>
+            </div>
+            <div id = "castVotePage" style="display:none">
+                <div id="constDetails2" style="background-color: wheat;height:50px;width:400px;margin-top:5px;margin-bottom:5px;font-weight: 50px"></div>
+                <div id="boothDetails2" style="background-color: wheat;height:50px;width:400px;margin-bottom:10px;font-weight: 50px"></div>
+                <div id="voterDetails">
+                  <p id="nameOfVoter"></p>
+                  <p id="aadharOfVoter"></p>
+                  </div>
+                  <select id="candidateList">
+                    <option>None</option>
+                  </select>
+                  <div id="voteButton" onclick="castVote()">Vote</div>
+            </div>
     </body>
 </html>

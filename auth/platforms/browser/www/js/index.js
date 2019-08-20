@@ -61,19 +61,35 @@ function scan()
             {
                 if(result.format == "QR_CODE")
                 {
-                    navigator.notification.prompt("Please enter name of data",  function(input){
-                        var name = input.input1;
+                        // var name = input.input1;
                         var value = result.text;
 
-                        var data = localStorage.getItem("LocalData");
-                        console.log(data);
-                        data = JSON.parse(data);
-                        data[data.length] = [name, value];
+                        // var data = localStorage.getItem("LocalData");
+                        // console.log(data);
+                        // alert(value);
+                        // alert(typeof value );
+                        value = value.split("\"");
+                        // alert("split");
+                        // alert(value2);
+                        // for(var i=2;i<value2.length;++i){
+                        //     alert(value2[i]);
+                        // }
+                        var aadharId = value[5];
+                        var name = value[7];
+                        var pincode;
+                        var yob = value[11];
 
-                        localStorage.setItem("LocalData", JSON.stringify(data));
+                        for(var i=value.length-1;i>=0;--i){
+                            if(value[i]==" pc="){
+                                pincode = value[i+1];
+                            }
+                        }
 
-                        alert("Done");
-                    });
+                // alert(aadharId);
+                //         alert(name);
+                //         alert(yob);
+                //         alert(pincode);        
+                  
                 }
             }
         },

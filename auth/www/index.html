@@ -179,11 +179,23 @@ span.psw {
                 </div>
               </div>
               </div>
-            <div id = "votingPage">
-              <div id="constDetails"></div>
-              <div id="boothDetails"></div>
-              <div id="vote">
             </div>
-        </div>
+            <div id = "votingPage"style="display: none">
+              <div id="constDetails" style="background-color: wheat;height:50px;width:400px;margin-top:5px;margin-bottom:5px;font-weight: 50px"></div>
+              <div id="boothDetails" style="background-color: wheat;height:50px;width:400px;margin-bottom:10px;font-weight: 50px"></div>
+              <div id="vote" style="background-color: chocolate;color:white;width:400px;height: 90px;text-align: center;padding-top:50px;left:40%;top:30%" onclick="scanToVote()">Scan Voters aadhar card to vote</div>
+            </div>
+            <div id = "castVotePage" style="display:none">
+                <div id="constDetails2" style="background-color: wheat;height:50px;width:400px;margin-top:5px;margin-bottom:5px;font-weight: 50px"></div>
+                <div id="boothDetails2" style="background-color: wheat;height:50px;width:400px;margin-bottom:10px;font-weight: 50px"></div>
+                <div id="voterDetails">
+                  <p id="nameOfVoter"></p>
+                  <p id="aadharOfVoter"></p>
+                  </div>
+                  <select id="candidateList">
+                    <option>None</option>
+                  </select>
+                  <div id="voteButton" onclick="castVote()">Vote</div>
+            </div>
     </body>
 </html>
