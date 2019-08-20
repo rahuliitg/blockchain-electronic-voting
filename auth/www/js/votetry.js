@@ -10,84 +10,87 @@ var officerBoothId;
 provider = new Web3.providers.HttpProvider('https://rahul.blockchain.azure.com:3200/z_-OS0Fjm8ArG7BO_9eIY4Ye');
 web3 = new Web3(provider);
 
-// var rawFile = new XMLHttpRequest();
-// rawFile.withCredentials = false;
-// rawFile.open("GET", "/home/mitanshu/projects/ElectionVoting/build/contracts/Migrations.json", false);
-// rawFile.onreadystatechange = function ()
-// {
-//     if(rawFile.readyState === 4)
-//     {
-//         if(rawFile.status === 200 || rawFile.status == 0)
-//         {
-//             json = rawFile.responseText;
-//             console.log(json);
-//         }
-//     }
-// }
-// rawFile.send(null);
+// $(document).ready(function(e) {
+//   $.getJSON( "js\\Voting.json" , function( result ){
+//       json = (result);
+//   });
+// })
+// var MyContract = TruffleContract(json);
+// MyContract.setProvider(provider);
+// console.log(MyContract);
 
-$(document).ready(function(e) {
-  $.getJSON( "js\\Voting.json" , function( result ){
-      json = (result);
-  });
-})
-var MyContract = TruffleContract(json);
-MyContract.setProvider(provider);
-console.log(MyContract);
+// /var path = OS.Path.join(__dirname,"votery.js")
+var MyContract;
 var Election;
 var account;
-var constCount=0;
-var accounts = web3.eth.getAccounts((error,result) => {
-  if (error) {
-      console.log(error);
-  } else {
-      web3.personal.unlockAccount(result[0],"Rahulgupta@12345", 15000);
-      account = result[0];
-  }
-});
+var accounts;
+$(document).ready(function(e) {
+  // console.log(__dirname);
+  console.log("path");
+  $.getJSON( "js/Voting2.json" , function( result ){
+    json=result;
+    MyContract = TruffleContract(json);
+    console.log("contract " + MyContract);
+    MyContract.setProvider(provider);
+    Election;
+    account;
+    var constCount=0;
+    accounts = web3.eth.getAccounts((error,result) => {
+      if (error) {
+          console.log(error);
+      } else {
+          web3.personal.unlockAccount(result[0],"Rahulgupta@12345", 15000);
+          account = result[0];
+          console.log(account);
+      }
+    });
 
-MyContract.deployed().then(function(instance) {
-    Election = instance;
-    return Election.constituencyCount();
-  }).then(function(constCount){
-    // var select = document.getElementById("candidateConstituency");
-    // // Election.constituencyToBooth(1,0).then(function(f){
-    // //   alert(f);
-    // //   // var option = document.createElement("option");
-    // //   // option.text = f[0];
-    // //   // var select = document.getElementById("boothList");
-    // //   // select.appendChild(option);
-    // // }).catch(error=>{
-    // //   alert("sd");
-    // //   alert(error);
-    // var x = "121212";
-    // Election.addCandidate("Guwahati","gahul",x, {from:account, gas:3000000}).then(function(f){
-    //   alert("success candidate add .. redirect to home page");
-       Election.candidateCount().then(function(f){console.log(f)});
-    // }).catch(error => {console.log(error)});
-    // //})
-    // // var x = "301001";
-    // // Election.pinToConstituency(x).then(function(f){
-    // //   alert("hola peeps");
-    // //   alert(f[0]);
-    // // })
-    // var aadharId = "910611041461";
-    // Election.officersList(910611041461).then(function(f){
-    //   console.log(f);
-    // }).catch(error => {
-    //   console.log(error);
-    // });
-    Election.boothList(1).then(function(f){console.log(f)}).catch(error=>{console.log(error)});
-    for(i = 1 ;i <= constCount; i++){
-      Election.constituencyList(i).then(function(f){
-        var select  = document.getElementById("candidateConstituency");
-        var option = document.createElement("option");
-        option.value = f[1];
-        option.text = f[0];
-        select.appendChild(option);
-      })
-    }
+    MyContract.deployed().then(function(instance) {
+        Election = instance;
+        return Election.constituencyCount();
+      }).then(function(constCount){
+        // var select = document.getElementById("candidateConstituency");
+        // // Election.constituencyToBooth(1,0).then(function(f){
+        // //   alert(f);
+        // //   // var option = document.createElement("option");
+        // //   // option.text = f[0];
+        // //   // var select = document.getElementById("boothList");
+        // //   // select.appendChild(option);
+        // // }).catch(error=>{
+        // //   alert("sd");
+        // //   alert(error);
+        // var x = "121212";
+        // Election.addCandidate("Guwahati","gahul",x, {from:account, gas:3000000}).then(function(f){
+        //   alert("success candidate add .. redirect to home page");
+          // Election.candidateCount().then(function(f){console.log(f)});
+        // }).catch(error => {console.log(error)});
+        // //})
+        // // var x = "301001";
+        // // Election.pinToConstituency(x).then(function(f){
+        // //   alert("hola peeps");
+        // //   alert(f[0]);
+        // // })
+        // var aadharId = "910611041461";
+        // Election.officersList(910611041461).then(function(f){
+        //   console.log(f);
+        // }).catch(error => {
+        //   console.log(error);
+        // });
+        Election.boothList(1).then(function(f){console.log(f)}).catch(error=>{console.log(error)});
+        for(i = 1 ;i <= constCount; i++){
+          Election.constituencyList(i).then(function(f){
+            var select  = document.getElementById("candidateConstituency");
+            var option = document.createElement("option");
+            option.value = f[1];
+            option.text = f[0];
+            select.appendChild(option);
+          })
+        }
+      
+    })
   })
+})
+
 
 function gotoAddVoterPage(){
   (document.getElementsByClassName("introPage")[0]).style.display = "none";

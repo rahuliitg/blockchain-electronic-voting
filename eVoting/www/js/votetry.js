@@ -5,6 +5,7 @@ var aadharId;
 var pincode;
 var yob;
 var json;
+var candidateId;
 provider = new Web3.providers.HttpProvider('https://rahul.blockchain.azure.com:3200/z_-OS0Fjm8ArG7BO_9eIY4Ye');
 web3 = new Web3(provider);
 
@@ -23,6 +24,12 @@ web3 = new Web3(provider);
 //     }
 // }
 // rawFile.send(null);
+var path = os.path
+$.getJSON( "", function( data ) {
+  console.log("inside getJsOn");
+});
+
+
 json = JSON.parse(JSON.stringify({
   "contractName": "Voting",
   "abi": [
