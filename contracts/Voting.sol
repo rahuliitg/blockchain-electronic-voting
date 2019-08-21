@@ -61,7 +61,7 @@ contract Voting{
     mapping(address => uint) public machineToBooth;
     mapping(uint => Booth[]) public constituencyToBooth;
     mapping(uint => Constituency) public pinToConstituency;
-    mapping (uint => Candidate[]) constituencyToCandidate;
+    mapping (uint => uint[]) public constituencyToCandidate;
     enum StateType { PreVoting, Voting, Result}
 
     //List of properties
@@ -90,7 +90,16 @@ contract Voting{
         pinToConstituency[827004] = constituencyList[1];
         pinToConstituency[307027] = constituencyList[1];
         pinToConstituency[132105] = constituencyList[1];
-        
+        pinToConstituency[282005] = constituencyList[1];
+    }
+    function changeState(uint stateNo) public {
+        if(stateNo==1){
+            State = StateType.PreVoting;
+        }else if(stateNo == 2){
+            State = StateType.Voting;
+        }else{
+            State = StateType.Result;
+        }
     }
 
     function addBooth(string memory boothAddress,uint constituencyId)public {
@@ -118,14 +127,13 @@ contract Voting{
         require(State==StateType.PreVoting,"Invalid State");
         // emit voteCast(msg.sender);
         // verify candidate
-        //require(officersList[msg.sender].doesExist == true,"Officer Not Authorized");
         uint constituencyId = constituencyNameToId[constituencyName];
         require(constituencyId > 0 && constituencyId <= constituencyCount,"Invalid Constituency");
         // check aadhar.
         // Person memory person = Person(name,aadharId);
         candidateCount++;
         candidates[candidateCount] = Candidate(name,aadharId,0,constituencyId,candidateCount,true);
-        constituencyToCandidate[constituencyId].push(candidates[candidateCount]);
+        constituencyToCandidate[constituencyId].push(candidateCount);
         constituencyList[constituencyId].candidateCount++;
     }
 
@@ -157,30 +165,30 @@ contract Voting{
         State = StateType.Voting;
     }
 
-    function vote(uint candidateId,uint aadharId)public {
-        require(State==StateType.Voting,"Invalid State");
-        require(machineToBooth[msg.sender] > 0 && machineToBooth[msg.sender] <= boothCount,"Invalid booth");
-        require(voters[aadharId].doesExist == true,"voter not registerd");
-        require(voters[aadharId].isVoted == false,"Already voted");
-        candidates[candidateId].voteCount += 1;
+    function vote(uint candidateId,uint aadharId) public  {
+        require((State==StateType.Voting),"Invalid State");
+        require((voters[aadharId].doesExist),"voter not registerd");
+        require((voters[aadharId].isVoted),"Already voted");
+        candidates[candidateId].voteCount++;
         voters[aadharId].isVoted = true;
-        // emit ()
     }
 
-    function verifyToVote(uint boothId, uint aadharId) public view returns (bool)  {
-        require(State==StateType.Voting,"Invalid State");
-        require(machineToBooth[msg.sender] > 0 && machineToBooth[msg.sender] <= boothCount,"Invalid booth");
-        require(machineToBooth[msg.sender] == boothId, "Action should be done at different Constituency or booth");
-        require(voters[aadharId].doesExist == true,"Voter not added to the voters list!");
-        require(voters[aadharId].boothId == boothId, "Voter does not belong to this booth ");
-        return true;
+    function verifyToVote(uint boothId, uint aadharId) public view returns (uint)  {
+        if(!(State==StateType.Voting))
+            return 1;
+        if(!(voters[aadharId].doesExist == true))
+            return 4;
+        if(!(voters[aadharId].boothId == boothId))
+            return 5;
+        return 0;
     }
 
-    function verifyOfficer(uint aadharId) public returns (bool){
-        require(State==StateType.PreVoting,"Invalid State");
-        require(officersList[aadharId].doesExist == true,"Invalid Officer");
-        machineToBooth[msg.sender] = officersList[aadharId].boothId;
-        return true;
+    function verifyOfficer(uint aadharId) public view returns (uint){
+        if(!(State==StateType.Voting))
+            return 1;
+        if(!(officersList[aadharId].doesExist))
+            return 2;
+        return 0;
     }
 
     function finishVoting() public{
@@ -197,27 +205,8 @@ contract Voting{
         Candidate[] result
     );
 
-    function getResults(uint constituencyId) public {
+    function finishElectionCheck() public {
         require(State == StateType.Result,"Invalid State");
-        require(constituencyId > 0 && constituencyId <= constituencyCount,"Invalid Constituency");
-            uint size = constituencyToCandidate[constituencyId].length;
-            uint count = 0 ;
-            while(size > 1 ){
-                uint maxVotes=0;
-                uint maxId = 0;
-                for(uint j=0;j<size-count;++j){
-                    if(maxVotes <= constituencyToCandidate[constituencyId][j].voteCount){
-                        maxVotes = constituencyToCandidate[constituencyId][j].voteCount;
-                        maxId = j;
-                    }
-                }
-                Candidate memory temp = constituencyToCandidate[constituencyId][count];
-                constituencyToCandidate[constituencyId][count] = constituencyToCandidate[constituencyId][maxId];
-                constituencyToCandidate[constituencyId][maxId] = temp;
-                count++;
-            }
-        
-        emit Result(constituencyToCandidate[constituencyId]);
     }
 }
 
