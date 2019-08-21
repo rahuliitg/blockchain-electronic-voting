@@ -76,11 +76,11 @@ contract Voting{
 
     constructor() public
     {
-        addConstituency("Guwahati");
-        addConstituency("Sheoganj");
-        addBooth("GS-Road",1);
-        addBooth("Paltan Bazar",1);
-        addBooth("Nagar Palika",2);
+        addConstituency("Hyderabad");
+        addConstituency("Bangalore");
+        addBooth("Gachibowli",1);
+        addBooth("Indira Nagar",2);
+        addBooth("Kormangla",2);
         addOfficer("Kartikey Kant",732449600739,1);
         addOfficer("Ashish Ranjan", 575848571904, 2);
         addOfficer("Mitanshu Mittal", 293274081107, 3);
@@ -89,8 +89,22 @@ contract Voting{
         pinToConstituency[456789] = constituencyList[1];
         pinToConstituency[827004] = constituencyList[1];
         pinToConstituency[307027] = constituencyList[1];
-        pinToConstituency[132105] = constituencyList[1];
-        pinToConstituency[282005] = constituencyList[1];
+        pinToConstituency[132105] = constituencyList[2];
+        pinToConstituency[282005] = constituencyList[2];
+        pinToConstituency[210204] = constituencyList[2];
+        pinToConstituency[482001] = constituencyList[2];
+        // addVoter("Bangalore",2,"Bhuvan  Agrawal",953072463830);
+        // addVoter("Hyderabad",1,"Mitanshu",293274081107);
+        // addVoter("Hyderabad",1,"Ashish Ranjan",575848571904);
+        // addVoter("Bangalore",2,"Kartikey Kant",732449600739);
+        // addVoter("Bangalore",3,"Chandan Agrawal",775633289221);
+        // addVoter("Bangalore",3,"Animesh Kumar",732921438310);
+        // addVoter("Hyderabad",1,"Rahul Kumar Gupta",910611041461);
+        // addCandidate("Hyderabad","isa",1234333);
+        // //addCandidate("Hyderabad","Ganesh",1234);
+        // addCandidate("Bangalore","Bunty",12345);
+        // addCandidate("Bangalore","Parulkar",123456);
+
     }
     function changeState(uint stateNo) public {
         if(stateNo==1){
@@ -167,8 +181,8 @@ contract Voting{
 
     function vote(uint candidateId,uint aadharId) public  {
         require((State==StateType.Voting),"Invalid State");
-        require((voters[aadharId].doesExist),"voter not registerd");
-        require((voters[aadharId].isVoted),"Already voted");
+        require(voters[aadharId].doesExist==true,"voter not registerd");
+        require(voters[aadharId].isVoted == true,"Already voted");
         candidates[candidateId].voteCount++;
         voters[aadharId].isVoted = true;
     }

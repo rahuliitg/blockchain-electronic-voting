@@ -329,8 +329,8 @@ function showVotingPage(){
       document.getElementById("boothDetails").innerHTML = "booth: "+document.getElementById("officerBooth").value;
       Election.constituencyList(parseInt(officerConstituencyId)).then(function(f){
         candidateCount = f[4];
-        alert(candidateCount);
-        alert(officerConstituencyId);
+        //alert(candidateCount);
+        //alert(officerConstituencyId);
         for(i = 0; i< candidateCount; i++){
           var select = document.getElementById("candidateList");
           Election.constituencyToCandidate(parseInt(officerConstituencyId), i).then(function(f){
@@ -365,16 +365,12 @@ function scanToVote(){
                     var name = value[7];
                     currVoterName = name;
                     currVoterAadhar = aadharId;
-                    alert(officerBoothId);
+                   // alert(officerBoothId);
                     Election.verifyToVote(parseInt(officerBoothId), parseInt(aadharId),{from:account, gas:30000000}).then(function(f){
                      // alert(f);
                       f = parseInt(f);
                       if(f==1)
                         alert("Invalid State");
-                      if(f==2)
-                        alert("Invalid booth")
-                      if(f==3)
-                        alert("Action should be done at different Constituency or booth")
                       if(f==4)
                         alert("Voter not added to the voters list!");
                       if(f==5)
