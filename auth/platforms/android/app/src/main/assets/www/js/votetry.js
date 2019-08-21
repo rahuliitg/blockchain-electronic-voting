@@ -329,8 +329,8 @@ function showVotingPage(){
       document.getElementById("boothDetails").innerHTML = "booth: "+document.getElementById("officerBooth").value;
       Election.constituencyList(parseInt(officerConstituencyId)).then(function(f){
         candidateCount = f[4];
-        alert(candidateCount);
-        alert(officerConstituencyId);
+        //alert(candidateCount);
+        //alert(officerConstituencyId);
         for(i = 0; i< candidateCount; i++){
           var select = document.getElementById("candidateList");
           Election.constituencyToCandidate(parseInt(officerConstituencyId), i).then(function(f){
@@ -365,16 +365,12 @@ function scanToVote(){
                     var name = value[7];
                     currVoterName = name;
                     currVoterAadhar = aadharId;
-                    alert(officerBoothId);
+                   // alert(officerBoothId);
                     Election.verifyToVote(parseInt(officerBoothId), parseInt(aadharId),{from:account, gas:30000000}).then(function(f){
                      // alert(f);
                       f = parseInt(f);
                       if(f==1)
                         alert("Invalid State");
-                      if(f==2)
-                        alert("Invalid booth")
-                      if(f==3)
-                        alert("Action should be done at different Constituency or booth")
                       if(f==4)
                         alert("Voter not added to the voters list!");
                       if(f==5)
@@ -413,18 +409,7 @@ function scanToVote(){
     }
     else{
       Election.vote(parseInt(candidateId), parseInt(currVoterAadhar), {from:account, gas:30000000}).then(function(f){
-        f = parseInt(f);
-        alert(f);
-        if(f==1)
-          alert("Invalid State");
-        if(f==2)
-          alert("Invalid booth");
-        if(f==3)
-          alert("voter not registerd");
-        if(f==4)
-          alert("Already voted");
-        if(f==0)
-          alert("You Voted for: "+x.options[x.selectedIndex].text);
+        alert("You Voted for: "+x.options[x.selectedIndex].text);
         document.getElementById("votingPage").style.display = "block";
         document.getElementById("castVotePage").style.display = "none";
         document.getElementById("constDetails2").innerHTML = "";
@@ -449,6 +434,7 @@ function scanToVote(){
   })
  }
  var result = [] ;
+ var temp1 = [{x:"Ganesh", value:5},{x:"isa", value:3}]
   function getResults(){
     var a = document.getElementById("str1ResultPage");
     a.innerHTML = "";
@@ -476,7 +462,7 @@ function scanToVote(){
                     // set the chart title
                      chart.title("Election results");
                     // add the data
-                    chart.data(temp);
+                    chart.data(temp1);
                     // display the chart in the container
                     chart.container('pieChart');
                     chart.draw();
