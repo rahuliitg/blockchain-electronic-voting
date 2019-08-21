@@ -1,0 +1,30 @@
+{
+  "name": "blockchain-ethereum-template",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "truffle-contract": "^4.0.28",
+    "truffle-hdwallet-provider": "^1.0.6",
+    "web3": "^1.2.1"
+  },
+  "description": "## Decision Helper Idea 1: Tracking progress of projects promised during elections. Description:  \ta)Political parties promise a lot of things in their manifesto during elections. \tb)Creating a portal where all the government project promised during elections are listed. User can click on any project and      see it's progress since it started. \tc)Track the progress of the promise at every step and if it delays from it's delivery time then a block with delay message        will be added to the block chain. \td)The progress of the project along with the fund details is updated on regular intervals, thus keeping all government            projects under public scrutiny. \te)This will help people judge the ruling party on the basis of their work, which is tracked using blockchain thus adding          reliability to the data provided. \tf)Represent the progress in form of informative pie charts and graphs.",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mitanshu001/blockchain-electronic-voting.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mitanshu001/blockchain-electronic-voting/issues"
+  },
+  "homepage": "https://github.com/mitanshu001/blockchain-electronic-voting#readme"
+}
