@@ -35,9 +35,53 @@ var app = {
             data = JSON.stringify(data);
             localStorage.setItem("LocalData", data);
         }
-           
-
     },
+
+    scan:function()
+    {
+        cordova.plugins.barcodeScanner.scan(
+            function (result) {
+                if(!result.cancelled)
+                {
+                    if(result.format == "QR_CODE")
+                    {
+                            // var name = input.input1;
+                            var value = result.text;
+
+                            // var data = localStorage.getItem("LocalData");
+                            // console.log(data);
+                            // alert(value);
+                            // alert(typeof value );
+                            value = value.split("\"");
+                            // alert("split");
+                            // alert(value2);
+                            // for(var i=2;i<value2.length;++i){
+                            //     alert(value2[i]);
+                            // }
+                            var aadharId = value[5];
+                            var name = value[7];
+                            var pincode;
+                            var yob = value[11];
+
+                            for(var i=value.length-1;i>=0;--i){
+                                if(value[i]==" pc="){
+                                    pincode = value[i+1];
+                                }
+                            }
+
+                    // alert(aadharId);
+                    //         alert(name);
+                    //         alert(yob);
+                    //         alert(pincode);        
+                    
+                    }
+                }
+            },
+            function (error) {
+                alert("Scanning failed: " + error);
+            }
+    );
+    }
 
     // Update DOM on a Received Event
     // receivedEvent: function(id) {
@@ -53,48 +97,3 @@ var app = {
 };
 
 app.initialize();
-function scan()
-{
-    cordova.plugins.barcodeScanner.scan(
-        function (result) {
-            if(!result.cancelled)
-            {
-                if(result.format == "QR_CODE")
-                {
-                        // var name = input.input1;
-                        var value = result.text;
-
-                        // var data = localStorage.getItem("LocalData");
-                        // console.log(data);
-                        // alert(value);
-                        // alert(typeof value );
-                        value = value.split("\"");
-                        // alert("split");
-                        // alert(value2);
-                        // for(var i=2;i<value2.length;++i){
-                        //     alert(value2[i]);
-                        // }
-                        var aadharId = value[5];
-                        var name = value[7];
-                        var pincode;
-                        var yob = value[11];
-
-                        for(var i=value.length-1;i>=0;--i){
-                            if(value[i]==" pc="){
-                                pincode = value[i+1];
-                            }
-                        }
-
-                // alert(aadharId);
-                //         alert(name);
-                //         alert(yob);
-                //         alert(pincode);        
-                  
-                }
-            }
-        },
-        function (error) {
-            alert("Scanning failed: " + error);
-        }
-   );
-}
