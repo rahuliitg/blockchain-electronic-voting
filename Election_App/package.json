@@ -13,7 +13,7 @@
   "author": "Apache Cordova Team",
   "license": "Apache-2.0",
   "dependencies": {
-    "cordova-android": "^7.1.4",
+    "cordova-android": "^11.0.0",
     "cordova-browser": "^6.0.0",
     "cordova-plugin-barcodescanner": "^0.7.4",
     "cordova-plugin-compat": "^1.2.0",
